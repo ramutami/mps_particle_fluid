@@ -97,8 +97,8 @@ $$
 という離散化の式を考えることができる。ここで、重み関数とは距離が遠くなるほど値が小さくなり適当な影響半径 $r_e$ で０となるような関数であり、MPS法では次の重み関数を用いる。
 
 $$
-w\left(r\right) = \left\{\begin{aligned}&\dfrac{r_e}{r}-1&\quad\left(r<r_e\right)\\
-&0 &\quad\left(r>r_e\right)\end{aligned}\right.
+w \left( r\right) = \left\{ \begin{aligned}&\dfrac{r_e}{r}-1&\quad\left(r<r_e\right)\\
+&0 &\quad\left(r>r_e\right)\end{aligned} \right.
 $$
 
 また、今、上の式の $2$ は二次元を仮定したことにより出てきた式であるから、次元数 $d$ をもちいて $2\rightarrow d $を書き換えることにする。また今、重みつき和の規格化定数である
