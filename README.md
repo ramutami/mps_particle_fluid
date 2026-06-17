@@ -667,7 +667,7 @@ end subroutine moveparticle
 
 
 $$
-\boldsymbol{e} _{ij}=\dfrac{\boldsymbol{X} _j-\boldsymbol{X} _i}{\left|\boldsymbol{X} _j-\boldsymbol{X} _i\right|}
+\boldsymbol{e} _{ij}=\dfrac{\boldsymbol{X} _j-\boldsymbol{X} _i}{\left\mid\boldsymbol{X} _j-\boldsymbol{X} _i\right\mid}
 $$
 
 $$
