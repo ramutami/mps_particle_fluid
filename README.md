@@ -672,8 +672,8 @@ $$
 
 $$
 \begin{aligned}
-\text{if}\; \left|\boldsymbol{X} _j-\boldsymbol{X} _i\right|<r _\text{col}\; \text{and}\; u _{ij}=\left(\boldsymbol{v} _j-\boldsymbol{v} _i\right)\cdot \boldsymbol{e} _{ij}\lt 0\;;\quad & J _{ij} = \left(1+e\right)\dfrac{m _im _j}{m _i+m _j}(-u _{ij})\newline
- \text{otherwise}\; ; \; \quad  & J _{ij} = 0 \newline
+\text{if}\; \left|\boldsymbol{X} _j-\boldsymbol{X} _i\right|\lt r _\text{col}\; \text{and}\; u _{ij}=\left(\boldsymbol{v} _j-\boldsymbol{v} _i\right)\cdot \boldsymbol{e} _{ij}\lt 0\;;\quad & J _{ij} = \left(1+e\right)\dfrac{m _im _j}{m _i+m _j}(-u _{ij})\newline
+\text{otherwise}\; ; \; \quad  & J _{ij} = 0 \newline
 \end{aligned}
 $$
 
