@@ -187,7 +187,7 @@ $$
 
 ### 衝突判定
 
-上では割愛していたが、重力項と粘性項により粒子を移動させたら、圧力項を計算する前に一旦粒子の衝突判定を行い衝突条件を満たすような粒子を反発させる。すなわち、二つの粒子間距離に関する条件 $\left|\boldsymbol{X}_j-\boldsymbol{X}_i\right|<r_\text{col}$ をみたし、かつ粒子が衝突する向きに動いている、すなわち $u_{ij}=\left(\boldsymbol{v}_j-\boldsymbol{v}_i\right)\cdot \boldsymbol{e}_{ij}<0$ が満たされる時、衝突インパクト（力積） $J_{ij}(=F\Delta)$ を反発係数 $e$ のもとに計算し、速度を $\boldsymbol{v}_i' = \boldsymbol{v}_i-\sum_{j}J_{ij}\boldsymbol{n}^\perp_{ij}/m_i$ によって更新する。（その後粒子の位置も更新する。）
+上では割愛していたが、重力項と粘性項により粒子を移動させたら、圧力項を計算する前に一旦粒子の衝突判定を行い衝突条件を満たすような粒子を反発させる。すなわち、二つの粒子間距離に関する条件 $\left|\boldsymbol{X}_j-\boldsymbol{X}_i\right|\lt　r_\text{col}$ をみたし、かつ粒子が衝突する向きに動いている、すなわち $u_{ij}=\left(\boldsymbol{v}_j-\boldsymbol{v}_i\right)\cdot \boldsymbol{e}_{ij}\lt　0$ が満たされる時、衝突インパクト（力積） $J_{ij}(=F\Delta)$ を反発係数 $e$ のもとに計算し、速度を $\boldsymbol{v}_i' = \boldsymbol{v}_i-\sum_{j}J_{ij}\boldsymbol{n}^\perp_{ij}/m_i$ によって更新する。（その後粒子の位置も更新する。）
 
 具体的な式としては、初め
 
