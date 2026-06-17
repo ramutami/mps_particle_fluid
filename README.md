@@ -297,9 +297,6 @@ $$
 &\qquad \beta _l = \dfrac{\left<\boldsymbol{r} _{l+1},\boldsymbol{r} _{l+1}\right>}{\left<\boldsymbol{r} _l,\boldsymbol{r} _l\right>}\newline
 &\qquad \boldsymbol{d} _{l+1} = \boldsymbol{r} _{l+1}+\beta _l\boldsymbol{d} _l\newline
 &\text{end do}
-
-
-
 \end{aligned}
 
 $$
