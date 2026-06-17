@@ -23,7 +23,7 @@
 ラグランジュ形式で書いたNavier-stokes equationは以下のよう
 
 $$
-\dfrac{D\boldsymbol{u}}{Dt}  = -\dfrac{1}{\rho}\nabla P +\nu\nabla^2\mathbf{u}+\boldsymbol{g}
+\dfrac{D\mathbf{u}}{Dt}  = -\dfrac{1}{\rho}\nabla P +\nu\nabla^2\mathbf{u}+\mathbf{g}
 $$
 
 ただし $\nu$ は一定とし、また非圧縮流体を考え $\rho = \rho^0 = \text{const}$ と考えることにする。以下ではこの方程式に従う流体の運動を数値的に解くことを考える。
@@ -33,8 +33,8 @@ $$
 
 $$
 \begin{aligned}
-&\boldsymbol{u}^{k+1}_i = \boldsymbol{u}^k_i + \Delta t\cdot\left(-\dfrac{1}{\rho}\nabla P +\nu\nabla^2\mathbf{u}+\boldsymbol{g} \right)^{k}_i\\[7pt]
-&\boldsymbol{r}^{k+1}_i= \boldsymbol{r}^k_i + \Delta t\cdot  \boldsymbol{u}^{k}
+&\mathbf{u}^{k+1}_i = \mathbf{u}^k_i + \Delta t\cdot\left(-\dfrac{1}{\rho}\nabla P +\nu\nabla^2\mathbf{u}+\mathbf{g} \right)^{k}_i\\[7pt]
+&\mathbf{r}^{k+1}_i= \mathbf{r}^k_i + \Delta t\cdot  \mathbf{u}^{k}
 \end{aligned}
 $$
 
@@ -48,7 +48,7 @@ $$
 
 まずはじめに空間方向の離散化ナブラ演算子 $\nabla$ の離散化を考える。
 
-まずは、すごいざっくりした場合で考察する。今、二次元系で粒子がブワーってあったとする。さらに、粒子間のベクトル $\boldsymbol{X}_{i+1}-\boldsymbol{X}_{i}$ と $\boldsymbol{X}_{i+2}-\boldsymbol{X}_{i}$ が正規直行系をなすとする。
+まずは、すごいざっくりした場合で考察する。今、二次元系で粒子がブワーってあったとする。さらに、粒子間のベクトル $\mathbf{X}_{i+1}-\mathbf{X}_{i}$ と $\mathbf{X}_{i+2}-\mathbf{X}_{i}$ が正規直行系をなすとする。
 
 ```txt
         o <- i+2
@@ -62,28 +62,28 @@ $$
 \nabla\phi = \dfrac{\partial \phi}{\partial X}\nabla X + \dfrac{\partial \phi}{\partial Y}\nabla Y
 $$
 
-で、 $X,Y$ が正規直交なら $\nabla X=\hat{\boldsymbol{e}}_X$ などから
+で、 $X,Y$ が正規直交なら $\nabla X=\hat{\mathbf{e}}_X$ などから
 
 $$
-\nabla\phi = \dfrac{\partial \phi}{\partial X}\hat{\boldsymbol{e}}_X + \dfrac{\partial \phi}{\partial Y}\hat{\boldsymbol{e}}_Y
+\nabla\phi = \dfrac{\partial \phi}{\partial X}\hat{\mathbf{e}}_X + \dfrac{\partial \phi}{\partial Y}\hat{\mathbf{e}}_Y
 $$
 
 となる。よって、
 
 $$
-\nabla\phi = \dfrac{\partial \phi}{\partial X_{\text{i+１方向}}}\dfrac{\boldsymbol{X}_{i+1}-\boldsymbol{X}_{i}}{|\boldsymbol{X}_{i+1}-\boldsymbol{X}_{i}|} + \dfrac{\partial \phi}{\partial X_{\text{i+2方向}}}\dfrac{\boldsymbol{X}_{i+2}-\boldsymbol{X}_{i}}{|\boldsymbol{X}_{i+2}-\boldsymbol{X}_{i}|}
+\nabla\phi = \dfrac{\partial \phi}{\partial X_{\text{i+１方向}}}\dfrac{\mathbf{X}_{i+1}-\mathbf{X}_{i}}{|\mathbf{X}_{i+1}-\mathbf{X}_{i}|} + \dfrac{\partial \phi}{\partial X_{\text{i+2方向}}}\dfrac{\mathbf{X}_{i+2}-\mathbf{X}_{i}}{|\mathbf{X}_{i+2}-\mathbf{X}_{i}|}
 $$
 
 であり、偏微分演算子を離散化すれば
 
 $$
-\nabla\phi = \dfrac{\phi(\boldsymbol{X}_{i+1})-\phi(\boldsymbol{X}_{i})}{|\boldsymbol{X}_{i+1}-\boldsymbol{X}_{i}|}\dfrac{\boldsymbol{X}_{i+1}-\boldsymbol{X}_{i}}{|\boldsymbol{X}_{i+1}-\boldsymbol{X}_{i}|} + \dfrac{\phi(\boldsymbol{X}_{i+2})-\phi(\boldsymbol{X}_{i})}{|\boldsymbol{X}_{i+2}-\boldsymbol{X}_{i}|}\dfrac{\boldsymbol{X}_{i+2}-\boldsymbol{X}_{i}}{|\boldsymbol{X}_{i+1}-\boldsymbol{X}_{i}|}
+\nabla\phi = \dfrac{\phi(\mathbf{X}_{i+1})-\phi(\mathbf{X}_{i})}{|\mathbf{X}_{i+1}-\mathbf{X}_{i}|}\dfrac{\mathbf{X}_{i+1}-\mathbf{X}_{i}}{|\mathbf{X}_{i+1}-\mathbf{X}_{i}|} + \dfrac{\phi(\mathbf{X}_{i+2})-\phi(\mathbf{X}_{i})}{|\mathbf{X}_{i+2}-\mathbf{X}_{i}|}\dfrac{\mathbf{X}_{i+2}-\mathbf{X}_{i}}{|\mathbf{X}_{i+1}-\mathbf{X}_{i}|}
 $$
 
-となる。よって今、影響半径内の総粒子数を $N$ として、全ての粒子 $\boldsymbol{X}_{j}$ に対し $\boldsymbol{X}_{j}-\boldsymbol{X}_{i}$ と $\boldsymbol{X}_{j'}-\boldsymbol{X}_{i}$　を満たすような $\boldsymbol{X}_{j'}$ が存在している（すなわち上の式が成立）と仮定する。このとき、 $N$ この粒子に対し上式を足し合わせれば（どの粒子も二回現れることに注意して）
+となる。よって今、影響半径内の総粒子数を $N$ として、全ての粒子 $\mathbf{X}_{j}$ に対し $\mathbf{X}_{j}-\mathbf{X}_{i}$ と $\mathbf{X}_{j'}-\mathbf{X}_{i}$　を満たすような $\mathbf{X}_{j'}$ が存在している（すなわち上の式が成立）と仮定する。このとき、 $N$ この粒子に対し上式を足し合わせれば（どの粒子も二回現れることに注意して）
 
 $$
-N\nabla\phi = 2\displaystyle\sum_{i\neq j}\dfrac{\phi(\boldsymbol{X}_{j})-\phi(\boldsymbol{X}_{i})}{|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|}\dfrac{\boldsymbol{X}_{j}-\boldsymbol{X}_{i}}{|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|}
+N\nabla\phi = 2\displaystyle\sum_{i\neq j}\dfrac{\phi(\mathbf{X}_{j})-\phi(\mathbf{X}_{i})}{|\mathbf{X}_{j}-\mathbf{X}_{i}|}\dfrac{\mathbf{X}_{j}-\mathbf{X}_{i}}{|\mathbf{X}_{j}-\mathbf{X}_{i}|}
 $$
 
 となる。
@@ -91,7 +91,7 @@ $$
 さて、実際の液体中の粒子はこんなに都合が良くはない。そもそも、綺麗に正規直行関係にある粒子ペアが必ず見つかるとは限らない上に、粒子 $X_{i}$ から遠い粒子が式に食い込むほど近似精度は悪くなってしまう。そこで、「まあざっくり上のような足し合わせでええやろ、でも重み関数をかけながら足し合わせて行こう」みたいなことを考えるわけで、それにより
 
 $$
-\left(\displaystyle\sum_{i\neq j}{w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)}\right)\nabla\phi = 2\displaystyle\sum_{i\neq j}\dfrac{\phi(\boldsymbol{X}_{j})-\phi(\boldsymbol{X}_{i})}{|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|}\dfrac{\boldsymbol{X}_{j}-\boldsymbol{X}_{i}}{|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|}w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)
+\left(\displaystyle\sum_{i\neq j}{w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)}\right)\nabla\phi = 2\displaystyle\sum_{i\neq j}\dfrac{\phi(\mathbf{X}_{j})-\phi(\mathbf{X}_{i})}{|\mathbf{X}_{j}-\mathbf{X}_{i}|}\dfrac{\mathbf{X}_{j}-\mathbf{X}_{i}}{|\mathbf{X}_{j}-\mathbf{X}_{i}|}w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)
 $$
 
 という離散化の式を考えることができる。ここで、重み関数とは距離が遠くなるほど値が小さくなり適当な影響半径 $r_e$ で０となるような関数であり、MPS法では次の重み関数を用いる。
@@ -104,19 +104,19 @@ $$
 また、今、上の式の $2$ は二次元を仮定したことにより出てきた式であるから、次元数 $d$ をもちいて $2\rightarrow d $を書き換えることにする。また今、重みつき和の規格化定数である
 
 $$
-n^i = \displaystyle\sum_{i\neq j}{w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)}
+n^i = \displaystyle\sum_{i\neq j}{w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)}
 $$
 
 については、初期状態で適当な液体内部粒子について計算しておいた値
 
 $$
-n_0 = \displaystyle\sum_{i\neq j}{w(|\boldsymbol{X}_{j}^{0}-\boldsymbol{X}_{i}^{0}|)}
+n_0 = \displaystyle\sum_{i\neq j}{w(|\mathbf{X}_{j}^{0}-\mathbf{X}_{i}^{0}|)}
 $$
 
 を用いて計算することにする。これを用いれば、
 
 $$
-\nabla\phi = \dfrac{d}{n^0}\displaystyle\sum_{i\neq j}\dfrac{\phi(\boldsymbol{X}_{j})-\phi(\boldsymbol{X}_{i})}{|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|}\dfrac{\boldsymbol{X}_{j}-\boldsymbol{X}_{i}}{|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|}w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)
+\nabla\phi = \dfrac{d}{n^0}\displaystyle\sum_{i\neq j}\dfrac{\phi(\mathbf{X}_{j})-\phi(\mathbf{X}_{i})}{|\mathbf{X}_{j}-\mathbf{X}_{i}|}\dfrac{\mathbf{X}_{j}-\mathbf{X}_{i}}{|\mathbf{X}_{j}-\mathbf{X}_{i}|}w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)
 $$
 
 として粒子法における空間一階微分の離散化が得られる。
@@ -125,13 +125,13 @@ $$
 ナブラの場合と似たように考えていくことができて（めんどくさいので割愛、詳しくは「<ins>粒子法入門〜流体シミュレーションの基礎から並列計算と可視化まで〜</ins>」を参照。）、
 
 $$
-\nabla^2 \phi= \dfrac{2d}{\lambda_0 n^0}\displaystyle\sum_{i\neq j}(\phi(\boldsymbol{X}_{j})-\phi(\boldsymbol{X}_{i}))w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)
+\nabla^2 \phi= \dfrac{2d}{\lambda_0 n^0}\displaystyle\sum_{i\neq j}(\phi(\mathbf{X}_{j})-\phi(\mathbf{X}_{i}))w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)
 $$
 
 のように離散化することができる。ただし、
 
 $$
-\lambda_0 = \dfrac{1}{n^0}\displaystyle\sum_{i\neq j}|\boldsymbol{X}_j -\boldsymbol{X}_i|^2 w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)
+\lambda_0 = \dfrac{1}{n^0}\displaystyle\sum_{i\neq j}|\mathbf{X}_j -\mathbf{X}_i|^2 w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)
 $$
 
 である。
@@ -141,7 +141,7 @@ $$
 微分演算子の離散化がもとまったので、実際に粒子速度・粒子位置をナビエストークス方程式に従って更新していくことを考える。今改めて、ナビエストークス方程式は以下のようであった。
 
 $$
-\dfrac{D\boldsymbol{u}}{Dt}  = -\dfrac{1}{\rho^0}\nabla P +\nu\nabla^2\mathbf{u}+\boldsymbol{g}
+\dfrac{D\mathbf{u}}{Dt}  = -\dfrac{1}{\rho^0}\nabla P +\nu\nabla^2\mathbf{u}+\mathbf{g}
 $$
 
 （ただし非圧縮条件を考え $\rho = \rho^0$ としている。）
@@ -150,27 +150,27 @@ $$
 
 $$
 \begin{aligned}
-& \dfrac{\boldsymbol{u}^{k+\frac{1}{2}}_i-\boldsymbol{u}^k_i}{\Delta t} = \nu \left(\nabla^2 \boldsymbol{u}\right)^{k}_i + \boldsymbol{g}\\
-& \dfrac{\boldsymbol{u}^{k+1}_i-\boldsymbol{u}^{k+\frac{1}{2}}_i}{\Delta t} = -\dfrac{1}{\rho^0}\left(\nabla P\right)^{k+\frac{1}{2}}_i
+& \dfrac{\mathbf{u}^{k+\frac{1}{2}}_i-\mathbf{u}^k_i}{\Delta t} = \nu \left(\nabla^2 \mathbf{u}\right)^{k}_i + \mathbf{g}\\
+& \dfrac{\mathbf{u}^{k+1}_i-\mathbf{u}^{k+\frac{1}{2}}_i}{\Delta t} = -\dfrac{1}{\rho^0}\left(\nabla P\right)^{k+\frac{1}{2}}_i
 \end{aligned}
 $$
 
-ただし $k$ は時間方向、 $i$ は空間方向の離散化を表している。その上で、 $\left(\nabla P\right)^{k+\frac{1}{2}}_i$ は次のように導かれるポアソン方程式を用いて求めることができる。まず下式の発散をとると、非圧縮条件より最終的に更新で得られる粒子速度 $\boldsymbol{u}^{k+1}_i$ は $\nabla \cdot \boldsymbol{u}^{k+1}_i = 0$ を満たさなければならないので
+ただし $k$ は時間方向、 $i$ は空間方向の離散化を表している。その上で、 $\left(\nabla P\right)^{k+\frac{1}{2}}_i$ は次のように導かれるポアソン方程式を用いて求めることができる。まず下式の発散をとると、非圧縮条件より最終的に更新で得られる粒子速度 $\mathbf{u}^{k+1}_i$ は $\nabla \cdot \mathbf{u}^{k+1}_i = 0$ を満たさなければならないので
 
 $$
-\dfrac{-\left(\nabla\cdot \boldsymbol{u}\right)^{k+\frac{1}{2}}_i}{\Delta t} = -\dfrac{1}{\rho^0}\left(\nabla^2 P\right)^{k+\frac{1}{2}}_i
+\dfrac{-\left(\nabla\cdot \mathbf{u}\right)^{k+\frac{1}{2}}_i}{\Delta t} = -\dfrac{1}{\rho^0}\left(\nabla^2 P\right)^{k+\frac{1}{2}}_i
 $$
 
-を得る。また、粘性項および重力項を用いて更新した粒子速度 $\boldsymbol{u}^{k+\frac{1}{2}}_i$ は計算途中で現れる量であるが、その計算過程においても連続の式は依然として成立する。すなわち、
+を得る。また、粘性項および重力項を用いて更新した粒子速度 $\mathbf{u}^{k+\frac{1}{2}}_i$ は計算途中で現れる量であるが、その計算過程においても連続の式は依然として成立する。すなわち、
 
 $$
-\dfrac{D\rho_i}{Dt} + \nabla \cdot\left( \rho_i \boldsymbol{u}^{k+\frac{1}{2}}_i\right)=0
+\dfrac{D\rho_i}{Dt} + \nabla \cdot\left( \rho_i \mathbf{u}^{k+\frac{1}{2}}_i\right)=0
 $$
 
 は成立しているはずである。よって $\rho^k_i = \rho^0 = \text{const}$ に注意しながら常識を離散化すれば、
 
 $$
-\dfrac{\rho^{k+\frac{1}{2}}_i-\rho^0}{\Delta t} + \rho^0 \left(\nabla \cdot \boldsymbol{u}\right)^{k+\frac{1}{2}}_i = 0 \; \leadsto \left(\nabla \cdot \boldsymbol{u}\right)^{k+\frac{1}{2}}_i = -\dfrac{1}{\Delta t}\dfrac{\rho^{k+\frac{1}{2}}_i-\rho^0}{\rho^0}\sim -\dfrac{1}{\Delta t}\dfrac{n^{k+\frac{1}{2}}_i-n^0}{n^0}
+\dfrac{\rho^{k+\frac{1}{2}}_i-\rho^0}{\Delta t} + \rho^0 \left(\nabla \cdot \mathbf{u}\right)^{k+\frac{1}{2}}_i = 0 \; \leadsto \left(\nabla \cdot \mathbf{u}\right)^{k+\frac{1}{2}}_i = -\dfrac{1}{\Delta t}\dfrac{\rho^{k+\frac{1}{2}}_i-\rho^0}{\rho^0}\sim -\dfrac{1}{\Delta t}\dfrac{n^{k+\frac{1}{2}}_i-n^0}{n^0}
 $$
 
 となる。ただし途中で密度 $\rho_i$ を数密度 $n_i$ によって近似した。よって得られた式を組み合わせれば、圧力について次のポアソン方程式が成立する。
@@ -182,24 +182,24 @@ $$
 よって先に示したラプラシアンの離散化を用いれば、次のような逆行列演算として圧力を計算できることがわかる。ただし以降は $\phi^{k+\frac{1}{2}}$ を省略して $\phi^*$ と書くことにする。
 
 $$
--\dfrac{1}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum_{j\neq i}\left(P_j^{\ast}-P_i^{\ast}\right)w(|\boldsymbol{r}_j^\ast -\boldsymbol{r}_i^\ast |)=\dfrac{1}{\Delta t^2}\dfrac{n_i^\ast -n^0}{n^0}
+-\dfrac{1}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum_{j\neq i}\left(P_j^{\ast}-P_i^{\ast}\right)w(|\mathbf{r}_j^\ast -\mathbf{r}_i^\ast |)=\dfrac{1}{\Delta t^2}\dfrac{n_i^\ast -n^0}{n^0}
 $$
 
 ### 衝突判定
 
-上では割愛していたが、重力項と粘性項により粒子を移動させたら、圧力項を計算する前に一旦粒子の衝突判定を行い衝突条件を満たすような粒子を反発させる。すなわち、二つの粒子間距離に関する条件 $\left|\boldsymbol{X}_j-\boldsymbol{X}_i\right|\lt　r_\text{col}$ をみたし、かつ粒子が衝突する向きに動いている、すなわち $u_{ij}=\left(\boldsymbol{v}_j-\boldsymbol{v}_i\right)\cdot \boldsymbol{e}_{ij}\lt　0$ が満たされる時、衝突インパクト（力積） $J_{ij}(=F\Delta)$ を反発係数 $e$ のもとに計算し、速度を $\boldsymbol{v}_i' = \boldsymbol{v}_i-\sum_{j}J_{ij}\boldsymbol{n}^\perp_{ij}/m_i$ によって更新する。（その後粒子の位置も更新する。）
+上では割愛していたが、重力項と粘性項により粒子を移動させたら、圧力項を計算する前に一旦粒子の衝突判定を行い衝突条件を満たすような粒子を反発させる。すなわち、二つの粒子間距離に関する条件 $\left|\mathbf{X}_j-\mathbf{X}_i\right|\lt　r_\text{col}$ をみたし、かつ粒子が衝突する向きに動いている、すなわち $u_{ij}=\left(\mathbf{v}_j-\mathbf{v}_i\right)\cdot \mathbf{e}_{ij}\lt　0$ が満たされる時、衝突インパクト（力積） $J_{ij}(=F\Delta)$ を反発係数 $e$ のもとに計算し、速度を $\mathbf{v}_i' = \mathbf{v}_i-\sum_{j}J_{ij}\mathbf{n}^\perp_{ij}/m_i$ によって更新する。（その後粒子の位置も更新する。）
 
 具体的な式としては、初め
 
 $$
-\boldsymbol{e}_{ij}=\dfrac{\boldsymbol{X}_j-\boldsymbol{X}_i}{\left|\boldsymbol{X}_j-\boldsymbol{X}_i\right|}
+\mathbf{e}_{ij}=\dfrac{\mathbf{X}_j-\mathbf{X}_i}{\left|\mathbf{X}_j-\mathbf{X}_i\right|}
 $$
 
 として計算し、
 
 $$
 \begin{aligned}
-&\text{if}\; \left|\boldsymbol{X}_j-\boldsymbol{X}_i\right|<r_\text{col}\; \text{and}\; u_{ij}=\left(\boldsymbol{v}_j-\boldsymbol{v}_i\right)\cdot \boldsymbol{e}_{ij}<0\;;\quad && J_{ij} = \left(1+e\right)\dfrac{m_im_j}{m_i+m_j}(-u_{ij})\\[5pt]
+&\text{if}\; \left|\mathbf{X}_j-\mathbf{X}_i\right|<r_\text{col}\; \text{and}\; u_{ij}=\left(\mathbf{v}_j-\mathbf{v}_i\right)\cdot \mathbf{e}_{ij}<0\;;\quad && J_{ij} = \left(1+e\right)\dfrac{m_im_j}{m_i+m_j}(-u_{ij})\\[5pt]
 & \text{otherwise}\quad  && J_{ij} = 0 \\
 \end{aligned}
 $$
@@ -208,7 +208,7 @@ $$
 
 
 $$
-\boldsymbol{v}'_{i} =\boldsymbol{v}_{i}-\displaystyle\sum_{j}\dfrac{J_{ij}}{m_i}\boldsymbol{e}_{ij}\quad ,\quad \boldsymbol{X}'_i = \boldsymbol{X}_i + \left(\boldsymbol{v}'_{i} -\boldsymbol{v}_{i}\right)\Delta t
+\mathbf{v}'_{i} =\mathbf{v}_{i}-\displaystyle\sum_{j}\dfrac{J_{ij}}{m_i}\mathbf{e}_{ij}\quad ,\quad \mathbf{X}'_i = \mathbf{X}_i + \left(\mathbf{v}'_{i} -\mathbf{v}_{i}\right)\Delta t
 $$
 
 として位置を修正する。
@@ -218,15 +218,15 @@ $$
 圧力$P$はポアソン方程式によって計算され、その離散化は次のようになるのであった。
 
 $$
--\dfrac{1}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum_{j\neq i}\left(P_j^{*}-P_i^{*}\right)w(|\boldsymbol{r}_j^* -\boldsymbol{r}_i^* |)=\dfrac{1}{\Delta t^2}\dfrac{n_i^* -n^0}{n^0}
+-\dfrac{1}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum_{j\neq i}\left(P_j^{*}-P_i^{*}\right)w(|\mathbf{r}_j^* -\mathbf{r}_i^* |)=\dfrac{1}{\Delta t^2}\dfrac{n_i^* -n^0}{n^0}
 $$
 
-この時、粒子 $\boldsymbol{X}_i$ 近傍の粒子数密度 $n^*_i$ をあらかじめ計算する必要がある。また、圧力のポアソン方程式を特にあたり境界条件を定める必要があるが、これは計算された粒子数密度 $n^*_i$ が一定値を下回った時にその粒子を自由表面粒子と判定し、その点において $p_i=0$ というディリクレ境界条件を入れることによって問題が解かれる。
+この時、粒子 $\mathbf{X}_i$ 近傍の粒子数密度 $n^*_i$ をあらかじめ計算する必要がある。また、圧力のポアソン方程式を特にあたり境界条件を定める必要があるが、これは計算された粒子数密度 $n^*_i$ が一定値を下回った時にその粒子を自由表面粒子と判定し、その点において $p_i=0$ というディリクレ境界条件を入れることによって問題が解かれる。
 
 具体的には、
 
 $$
-n^*_i = \displaystyle\sum_{j\neq i}w\left(\left|\boldsymbol{X}_i-\boldsymbol{X}_j\right|\right)
+n^*_i = \displaystyle\sum_{j\neq i}w\left(\left|\mathbf{X}_i-\mathbf{X}_j\right|\right)
 $$
 
 によって粒子数密度を計算し、
@@ -246,10 +246,10 @@ $$
 $$
 
 $$
-\left(\text{ただし}\; c_{ij} = \dfrac{w(|\boldsymbol{r}_i^* -\boldsymbol{r}_j^* |)}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\;,\; b_i = \dfrac{1}{\Delta t^2}\dfrac{n_i^* -n^0}{n^0}\right)
+\left(\text{ただし}\; c_{ij} = \dfrac{w(|\mathbf{r}_i^* -\mathbf{r}_j^* |)}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\;,\; b_i = \dfrac{1}{\Delta t^2}\dfrac{n_i^* -n^0}{n^0}\right)
 $$
 
-よって $P_i = P_i^*$ としてベクトル $\boldsymbol{P}$ を定め、行列 $A$ を
+よって $P_i = P_i^*$ としてベクトル $\mathbf{P}$ を定め、行列 $A$ を
 
 $$
 A_{ij} = \left\{\begin{aligned}
@@ -258,10 +258,10 @@ A_{ij} = \left\{\begin{aligned}
 \end{aligned}\right.
 $$
 
-によって定めれば、ポアソン方程式は行列方程式 $A\boldsymbol{P}=\boldsymbol{b}$ によって計算することができ、特に $A$ が対称行列となることを利用すれば共役勾配法などで解くことができる。ただし、実際の計算の上では安定性の向上及び収束性の向上のため、 $A\boldsymbol{P}=\boldsymbol{b}$ を次のように修正する。
+によって定めれば、ポアソン方程式は行列方程式 $A\mathbf{P}=\mathbf{b}$ によって計算することができ、特に $A$ が対称行列となることを利用すれば共役勾配法などで解くことができる。ただし、実際の計算の上では安定性の向上及び収束性の向上のため、 $A\mathbf{P}=\mathbf{b}$ を次のように修正する。
 
 $$
-\left(A+\dfrac{\kappa}{\Delta t^2}I\right)\boldsymbol{P} = \gamma \boldsymbol{b}
+\left(A+\dfrac{\kappa}{\Delta t^2}I\right)\mathbf{P} = \gamma \mathbf{b}
 $$
 
 ただし上記の修正及び $\kappa,\beta$ の具体的な選び方は「<ins>粒子法入門〜流体シミュレーションの基礎から並列計算と可視化まで〜</ins>」を参考にしている。また、ディリクレ境界条件については、表面粒子として判定された $i$ に対して $P_i = b_i=0$ として計算すれば良い。
@@ -271,31 +271,31 @@ $$
 上の式で出てくる行列は実対称正定値となっている。対称性はいいとして、正定値性については
 
 $$
-\boldsymbol{P}^TA\boldsymbol{P} = \cdots = \dfrac{1}{2}\displaystyle\sum_{i,j}c_{ij}\left(P_i-P_j\right)^2 +  \dfrac{\kappa}{\Delta t^2}P_i^2
+\mathbf{P}^TA\mathbf{P} = \cdots = \dfrac{1}{2}\displaystyle\sum_{i,j}c_{ij}\left(P_i-P_j\right)^2 +  \dfrac{\kappa}{\Delta t^2}P_i^2
 $$
 
 から従う。これを説明すると次のよう。
 
-今式の形から半正定値性 $\boldsymbol{P}^TA\boldsymbol{P} \geq 0$ は明らか。そこで $\boldsymbol{P}^TA\boldsymbol{P} =0 $ となる条件について考えるが、まず右辺第一項については $c_{ij}\propto w(|\boldsymbol{r}_i^* -\boldsymbol{r}_j^* |)$ であったのでこれが $0$ となるには「（重み関数が非ゼロとなるような）近傍粒子で圧力値が等しくなる」ことが必要となる。よって近傍粒子を辿っていけば自由表面粒子にたどり着くことを考えると、右辺第一項が $0$ となるためには任意の粒子において $P_i=0$ とならなければならないことがわかる。（ただし、「近傍粒子を辿っていっても自由表面粒子にたりつかないような内部粒子」、すなわち孤立して存在するが数密度があまり小さくない粒子（孤立した二つの粒子が非常に接近してる場合など）が存在する場合においてはこれら粒子に対し $P_i=\text{const}\neq0$ となっても右辺第一項が $0$ となってしまう。ただしこの場合においては右辺第二項が非ゼロとなり、 $\boldsymbol{P}^TA\boldsymbol{P} > 0$ となる。）よって $\boldsymbol{P}^TA\boldsymbol{P} \geq 0\Rightarrow \boldsymbol{P}=0$ なので、確かに $A$ は正定値である。
+今式の形から半正定値性 $\mathbf{P}^TA\mathbf{P} \geq 0$ は明らか。そこで $\mathbf{P}^TA\mathbf{P} =0 $ となる条件について考えるが、まず右辺第一項については $c_{ij}\propto w(|\mathbf{r}_i^* -\mathbf{r}_j^* |)$ であったのでこれが $0$ となるには「（重み関数が非ゼロとなるような）近傍粒子で圧力値が等しくなる」ことが必要となる。よって近傍粒子を辿っていけば自由表面粒子にたどり着くことを考えると、右辺第一項が $0$ となるためには任意の粒子において $P_i=0$ とならなければならないことがわかる。（ただし、「近傍粒子を辿っていっても自由表面粒子にたりつかないような内部粒子」、すなわち孤立して存在するが数密度があまり小さくない粒子（孤立した二つの粒子が非常に接近してる場合など）が存在する場合においてはこれら粒子に対し $P_i=\text{const}\neq0$ となっても右辺第一項が $0$ となってしまう。ただしこの場合においては右辺第二項が非ゼロとなり、 $\mathbf{P}^TA\mathbf{P} > 0$ となる。）よって $\mathbf{P}^TA\mathbf{P} \geq 0\Rightarrow \mathbf{P}=0$ なので、確かに $A$ は正定値である。
 
 （※ $\kappa/\Delta t$ の項が正定値性を助けているが、それでも先に述べたように「近傍粒子を辿っていっても自由表面粒子にたりつかないような内部粒子」が存在してしまうと正定値性は弱くなってしまう。そこで 「<ins>粒子法入門〜流体シミュレーションの基礎から並列計算と可視化まで〜</ins>」においては、このような粒子に対し対角項を二倍にするなどの処理を行うことで計算を安定化させている。（余裕があればこの処理を入れたい...））
 
 また、 $A$ の係数は近傍粒子以外では $0$ となり疎行列となる。よって理想的には近傍粒子リストを作成し、それらに対してのみ行列の係数の計算を行うのが良い。（コード全体に言えることではある。）ただ、今回はそこまでの余裕はないので普通に行列を作って計算することにする。といっても、行列をそのまま作ると粒子数 $^2$ のメモリを保持することになり現実的ではないので、今回は共役勾配法の各ステップごとに行列の係数を計算して（メモリには保持せず）ベクトルとの積を計算することにする。
 
-また、今 $A\boldsymbol{p}=\boldsymbol{b}$ という方程式に対し、共役勾配法のアルゴリズムは次のよう。
+また、今 $A\mathbf{p}=\mathbf{b}$ という方程式に対し、共役勾配法のアルゴリズムは次のよう。
 
 $$
 \begin{aligned}
-&\boldsymbol{p}_0=0\\
-&\boldsymbol{r}_0 = \boldsymbol{b}-A\boldsymbol{P}_0\\
-&\boldsymbol{d}_0 = \boldsymbol{r}_0\\
+&\mathbf{p}_0=0\\
+&\mathbf{r}_0 = \mathbf{b}-A\mathbf{P}_0\\
+&\mathbf{d}_0 = \mathbf{r}_0\\
 &\text{do}\; l= 0,1,2,\ldots\\
-&\qquad \alpha_l = \dfrac{\left<\boldsymbol{r}_l,\boldsymbol{r}_l\right>}{\left<\boldsymbol{d}_l,A\boldsymbol{d}_l\right>}\\
-&\qquad \boldsymbol{P}_{l+1} = \boldsymbol{P}_l + \alpha_l\boldsymbol{d}_l\\
-&\qquad \boldsymbol{r}_{l+1} = \boldsymbol{r}_{l}-\alpha_l A\boldsymbol{d}_l\\
-&\qquad \text{if}\; \left(\dfrac{\left|\boldsymbol{r}_l\right|}{\left|\boldsymbol{b}\right|}<\varepsilon\right)\; \text{break}\\
-&\qquad \beta_l = \dfrac{\left<\boldsymbol{r}_{l+1},\boldsymbol{r}_{l+1}\right>}{\left<\boldsymbol{r}_l,\boldsymbol{r}_l\right>}\\
-&\qquad \boldsymbol{d}_{l+1} = \boldsymbol{r}_{l+1}+\beta_l\boldsymbol{d}_l\\
+&\qquad \alpha_l = \dfrac{\left<\mathbf{r}_l,\mathbf{r}_l\right>}{\left<\mathbf{d}_l,A\mathbf{d}_l\right>}\\
+&\qquad \mathbf{P}_{l+1} = \mathbf{P}_l + \alpha_l\mathbf{d}_l\\
+&\qquad \mathbf{r}_{l+1} = \mathbf{r}_{l}-\alpha_l A\mathbf{d}_l\\
+&\qquad \text{if}\; \left(\dfrac{\left|\mathbf{r}_l\right|}{\left|\mathbf{b}\right|}<\varepsilon\right)\; \text{break}\\
+&\qquad \beta_l = \dfrac{\left<\mathbf{r}_{l+1},\mathbf{r}_{l+1}\right>}{\left<\mathbf{r}_l,\mathbf{r}_l\right>}\\
+&\qquad \mathbf{d}_{l+1} = \mathbf{r}_{l+1}+\beta_l\mathbf{d}_l\\
 &\text{end do}
 
 
@@ -317,13 +317,13 @@ $$
 また、勾配計算についても半陰解法とは異なった方法を用いることになる。今半陰解法においては
 
 $$
-\left(\nabla P\right)^*_i = \dfrac{d}{n^0}\displaystyle\sum_{i\neq j}\dfrac{P^*_j-P^*_i}{|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|^2}\left(\boldsymbol{X}_{j}-\boldsymbol{X}_{i}\right)w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)
+\left(\nabla P\right)^*_i = \dfrac{d}{n^0}\displaystyle\sum_{i\neq j}\dfrac{P^*_j-P^*_i}{|\mathbf{X}_{j}-\mathbf{X}_{i}|^2}\left(\mathbf{X}_{j}-\mathbf{X}_{i}\right)w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)
 $$
 
 のように圧力勾配を計算するが、陽解法においては
 
 $$
-\left(\nabla P\right)^*_i=\dfrac{d}{n^0}\displaystyle\sum_{i\neq j}\dfrac{P^*_j+P^*_i}{|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|^2}\left(\boldsymbol{X}_{j}-\boldsymbol{X}_{i}\right)w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)
+\left(\nabla P\right)^*_i=\dfrac{d}{n^0}\displaystyle\sum_{i\neq j}\dfrac{P^*_j+P^*_i}{|\mathbf{X}_{j}-\mathbf{X}_{i}|^2}\left(\mathbf{X}_{j}-\mathbf{X}_{i}\right)w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)
 $$
 
 のように差分を和で置き換えて計算することになる。詳しくは「<ins>粒子法入門〜流体シミュレーションの基礎から並列計算と可視化まで〜</ins>」を参照。また重み関数も陽解法とは異なったものを用いることが望ましく、具体的には
@@ -436,7 +436,7 @@ k〜k+1ステップに粒子の情報を更新するルーチン。以下のcalG
 
 改めてナビエストークス方程式は
 
-$$\dfrac{D\boldsymbol{u}}{Dt}  = -\dfrac{1}{\rho}\nabla P +\nu\nabla^2\mathbf{u}+\boldsymbol{g}$$
+$$\dfrac{D\mathbf{u}}{Dt}  = -\dfrac{1}{\rho}\nabla P +\nu\nabla^2\mathbf{u}+\mathbf{g}$$
 
 のようになっており、mainLoopOfSimuationにおいては、まず重力項と粘性項をcalGravity、calViscosityによって計算し、それら加速度を用いて一旦粒子の情報をアップデートする。次にcalPressureを用いて粒子の圧力を計算し、圧力項をcalPressureGradientによって計算する。その後、それを用いて再度粒子の情報をアップデートする。
 
@@ -461,7 +461,7 @@ calGravity,calViscosityで計算した加速度をつかって粒子の位置・
 各粒子位置での圧力を計算するルーチン。以下のcalNumberDensity~setMinimumPressureで構成される。今、圧力$P$はポアソン方程式を解くことによって得られ、その離散化は
 
 $$
--\dfrac{1}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum_{j\neq i}\left(P_j^{k+1}-P_i^{k+1}\right)w(|\boldsymbol{r}_j^* -\boldsymbol{r}_i^* |)=\dfrac{1}{\Delta t^2}\dfrac{n_i^* -n^0}{n^0}
+-\dfrac{1}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum_{j\neq i}\left(P_j^{k+1}-P_i^{k+1}\right)w(|\mathbf{r}_j^* -\mathbf{r}_i^* |)=\dfrac{1}{\Delta t^2}\dfrac{n_i^* -n^0}{n^0}
 $$
 
 と表されるのであった。よって、圧力を計算するためには粒子近傍の粒子数密度 $n^*_i$ を計算し、その値によって自由表面境界にある粒子を選別した上で自由表面における境界条件 $p_i=0$ を与えなければならない。また、その後のポアソン方程式を解く過程も、「右辺（ソース項の決定）」「左辺の圧力行列の準備」「行列方程式の求解による各粒子点での圧力の計算」「負圧の除去」といったプロセスを辿ることになる。また、後々圧力項（ $\nabla p$ ）を計算するにあたって、近傍最小圧力を計算しておく必要がある。
@@ -535,7 +535,7 @@ $$
 計算で用いる定数を計算するサブルーチン。まず、
 
 $$
-n^0 = \displaystyle\sum_{i\neq j}w(|\boldsymbol{X}_j-\boldsymbol{X}_i|)
+n^0 = \displaystyle\sum_{i\neq j}w(|\mathbf{X}_j-\mathbf{X}_i|)
 $$
 
 の値を計算する。このとき、用いる影響半径 $R_e$ は $n^0$ の用途によって異なることに注意する。
@@ -588,7 +588,7 @@ i_for_Re = floor(Re_for_laplacian/particle_distance)+1
 重力による加速を求めるルーチン。
 
 $$
-\left.\dfrac{D\boldsymbol{u}}{Dt}\right|_{gravity} = g\cdot\hat{\boldsymbol{e}}_y
+\left.\dfrac{D\mathbf{u}}{Dt}\right|_{gravity} = g\cdot\hat{\mathbf{e}}_y
 $$
 
 であるから、
@@ -606,7 +606,7 @@ acceleration(i,3) = 0
 改めて粘性項の離散化は、先に示したラプラシアンの離散化を用いて
 
 $$
-\nabla^2 \boldsymbol{u}= \dfrac{\nu \cdot 2d}{\lambda_0 n^0}\displaystyle\sum_{i\neq j}(\boldsymbol{u}(\boldsymbol{X}_{j})-\boldsymbol{u}(\boldsymbol{X}_{i}))w(|\boldsymbol{X}_{j}-\boldsymbol{X}_{i}|)
+\nabla^2 \mathbf{u}= \dfrac{\nu \cdot 2d}{\lambda_0 n^0}\displaystyle\sum_{i\neq j}(\mathbf{u}(\mathbf{X}_{j})-\mathbf{u}(\mathbf{X}_{i}))w(|\mathbf{X}_{j}-\mathbf{X}_{i}|)
 $$
 
 となる。動粘性係数（単位：m^2/s）については、適当な文献を参照すればいい。これは自由に変更できるパラメタになっている。概要は以下。
@@ -671,18 +671,18 @@ end subroutine moveparticle
 
 
 $$
-\boldsymbol{e}_{ij}=\dfrac{\boldsymbol{X}_j-\boldsymbol{X}_i}{\left|\boldsymbol{X}_j-\boldsymbol{X}_i\right|}
+\mathbf{e}_{ij}=\dfrac{\mathbf{X}_j-\mathbf{X}_i}{\left|\mathbf{X}_j-\mathbf{X}_i\right|}
 $$
 
 $$
 \begin{aligned}
-\text{if}\; \left|\boldsymbol{X}_j-\boldsymbol{X}_i\right|<r_\text{col}\; \text{and}\; u_{ij}=\left(\boldsymbol{v}_j-\boldsymbol{v}_i\right)\cdot \boldsymbol{e}_{ij}<0\;;\quad & J_{ij} = \left(1+e\right)\dfrac{m_im_j}{m_i+m_j}(-u_{ij})\\[5pt]
+\text{if}\; \left|\mathbf{X}_j-\mathbf{X}_i\right|<r_\text{col}\; \text{and}\; u_{ij}=\left(\mathbf{v}_j-\mathbf{v}_i\right)\cdot \mathbf{e}_{ij}<0\;;\quad & J_{ij} = \left(1+e\right)\dfrac{m_im_j}{m_i+m_j}(-u_{ij})\\[5pt]
  \text{otherwise}\; ; \; \quad  & J_{ij} = 0 \\
 \end{aligned}
 $$
 
 $$
-\boldsymbol{v}'_{i} =\boldsymbol{v}_{i}-\displaystyle\sum_{j}\dfrac{J_{ij}}{m_i}\boldsymbol{e}_{ij}\quad ,\quad \boldsymbol{X}'_i = \boldsymbol{X}_i + \left(\boldsymbol{v}'_{i} -\boldsymbol{v}_{i}\right)\Delta t
+\mathbf{v}'_{i} =\mathbf{v}_{i}-\displaystyle\sum_{j}\dfrac{J_{ij}}{m_i}\mathbf{e}_{ij}\quad ,\quad \mathbf{X}'_i = \mathbf{X}_i + \left(\mathbf{v}'_{i} -\mathbf{v}_{i}\right)\Delta t
 $$
 
 ただし、 $m_i = m_j$ と考えるので、結局 $\frac{m_im_j}{m_i+m_j}\frac{1}{m_i} = \frac{1}{2}$ となる。なので $m_i,m_j$ は計算する必要がない。概要は以下。
@@ -739,7 +739,7 @@ end subroutine collision
 粒子近傍の粒子数密度を計算するルーチン。ただし、粒子数密度は重み関数を用いて
 
 $$
-n^*_i = \displaystyle\sum_{j\neq i}w\left(\left|\boldsymbol{X}_i-\boldsymbol{X}_j\right|\right)
+n^*_i = \displaystyle\sum_{j\neq i}w\left(\left|\mathbf{X}_i-\mathbf{X}_j\right|\right)
 $$
 
 のように計算する。
