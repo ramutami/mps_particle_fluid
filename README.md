@@ -215,10 +215,10 @@ $$
 
 
 ### 圧力項の計算
-圧力$P$はポアソン方程式によって計算され、その離散化は次のようになるのであった。
+圧力 $P$ はポアソン方程式によって計算され、その離散化は次のようになるのであった。
 
 $$
--\dfrac{1}{\rho _0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum _{j\neq i}\left(P _j^{*}-P _i^{*}\right)w(|\boldsymbol{r} _j^* -\boldsymbol{r} _i^* |)=\dfrac{1}{\Delta t^2}\dfrac{n _i^* -n^0}{n^0}
+-\dfrac{1}{\rho _0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum _{j\neq i}\left(P _j^{\ast}-P _i^{\ast}\right)w(|\boldsymbol{r} _j^\ast -\boldsymbol{r} _i^\ast |)=\dfrac{1}{\Delta t^2}\dfrac{n _i^\ast -n^0}{n^0}
 $$
 
 この時、粒子 $\boldsymbol{X} _i$ 近傍の粒子数密度 $n^* _i$ をあらかじめ計算する必要がある。また、圧力のポアソン方程式を特にあたり境界条件を定める必要があるが、これは計算された粒子数密度 $n^* _i$ が一定値を下回った時にその粒子を自由表面粒子と判定し、その点において $p _i=0$ というディリクレ境界条件を入れることによって問題が解かれる。
