@@ -33,7 +33,7 @@ $$
 
 $$
 \begin{aligned}
-&\mathbf{u}^{k+1}_i = \mathbf{u}^k_i + \Delta t\cdot\left(-\dfrac{1}{\rho}\nabla P +\nu\nabla^2\mathbf{u}+\mathbf{g} \right)^{k}_i\\[7pt]
+&\mathbf{u}^{k+1}_i = \mathbf{u}^k_i + \Delta t\cdot\left(-\dfrac{1}{\rho}\nabla P +\nu\nabla^2\mathbf{u}+\mathbf{g} \right)^{k}_i \\ [7pt]
 &\mathbf{r}^{k+1}_i= \mathbf{r}^k_i + \Delta t\cdot  \mathbf{u}^{k}
 \end{aligned}
 $$
