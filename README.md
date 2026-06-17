@@ -97,7 +97,7 @@ $$
 という離散化の式を考えることができる。ここで、重み関数とは距離が遠くなるほど値が小さくなり適当な影響半径 $r_e$ で０となるような関数であり、MPS法では次の重み関数を用いる。
 
 $$
-w \left( r\right) = \left\{ \begin{aligned}&\dfrac{r_e}{r}-1&\quad\left(r<r_e\right)\\
+w \left( r\right) = \left\lbrace \begin{aligned}&\dfrac{r_e}{r}-1&\quad\left(r<r_e\right)\\
 &0 &\quad\left(r>r_e\right)\end{aligned} \right.
 $$
 
