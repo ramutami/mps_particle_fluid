@@ -182,7 +182,7 @@ $$
 よって先に示したラプラシアンの離散化を用いれば、次のような逆行列演算として圧力を計算できることがわかる。ただし以降は $\phi^{k+\frac{1}{2}}$ を省略して $\phi^*$ と書くことにする。
 
 $$
--\dfrac{1}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum_{j\neq i}\left(P_j^{*}-P_i^{*}\right)w(|\boldsymbol{r}_j^* -\boldsymbol{r}_i^* |)=\dfrac{1}{\Delta t^2}\dfrac{n_i^* -n^0}{n^0}
+-\dfrac{1}{\rho_0}\dfrac{2d}{\lambda^0 n^0}\displaystyle\sum_{j\neq i}\left(P_j^{\ast}-P_i^{\ast}\right)w(|\boldsymbol{r}_j^\ast -\boldsymbol{r}_i^\ast |)=\dfrac{1}{\Delta t^2}\dfrac{n_i^\ast -n^0}{n^0}
 $$
 
 ### 衝突判定
