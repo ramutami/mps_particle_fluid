@@ -242,17 +242,17 @@ $$
 上で与えられたポアソン方程式は次のように書き換えることができる。
 
 $$
-\displaystyle\sum _{j\neq i}c _{ij}\left(P _i^{*}-P _j^{*}\right)=b _i
+\displaystyle\sum _{j\neq i}c _{ij}\left(P _i^{\ast}-P _j^{\ast}\right)=b _i
 $$
 
 $$
 \left(\text{ただし}\; c _{ij} = \dfrac{w(|\boldsymbol{r} _i^* -\boldsymbol{r} _j^* |)}{\rho _0}\dfrac{2d}{\lambda^0 n^0}\;,\; b _i = \dfrac{1}{\Delta t^2}\dfrac{n _i^* -n^0}{n^0}\right)
 $$
 
-よって $P _i = P _i^*$ としてベクトル $\boldsymbol{P}$ を定め、行列 $A$ を
+よって $P _i = P _i^\ast$ としてベクトル $\boldsymbol{P}$ を定め、行列 $A$ を
 
 $$
-A _{ij} = \left\{\begin{aligned}
+A _{ij} = \left\lbrace\begin{aligned}
 &\; -c _{ij} \quad && \left(j\neq i\right)\newline
 &\; \displaystyle\sum _{j'\neq i} c _{ij'} &&\left(j= i\right)
 \end{aligned}\right.
