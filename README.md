@@ -298,7 +298,6 @@ $$
 &\qquad \boldsymbol{d} _{l+1} = \boldsymbol{r} _{l+1}+\beta _l\boldsymbol{d} _l\newline
 &\text{end do}
 \end{aligned}
-
 $$
 
 ## 陽解法
